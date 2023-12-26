@@ -8,6 +8,7 @@ const getAllProjects = async (req, res) => {
     try {
         const projects = await Project.find().sort({ createdAt: -1 });
         res.status(200).json(projects);
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
