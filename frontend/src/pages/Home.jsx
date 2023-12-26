@@ -1,12 +1,14 @@
 import React from 'react'
-import NavBar from '../componenets/navbar'
+
+import ProjectForm from '../componenets/projectForm'
 
 
 const Home = () => {
-    return(
-        <>
-           <h1>Home</h1>
-        </>
+    
+    return (
+    <>
+        <h1>Home</h1>
+    </>
     )
 }
 

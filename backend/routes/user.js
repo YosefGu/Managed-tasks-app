@@ -5,13 +5,15 @@ require('../controllers/userControllers');
 
 const router = express.Router();
 
-router.use(requireAuth);
 
 // signup route
 router.post('/signup', signupUser);
 
 // login route
-router.post('/login', loginUser)
+router.post('/login', loginUser);
+
+// authorization
+router.use(requireAuth);
 
 // GET all users
 router.get('/users', getAllUsers);
@@ -19,10 +21,10 @@ router.get('/users', getAllUsers);
 // GET a single user
 router.get('/:id', getUser);
 
-//DELETE a note
+//DELETE a user
 router.delete('/:id', deleteUser);
 
-//UPDATE a note
+//UPDATE a user
 router.patch('/:id', updateUser);
 
 module.exports = router

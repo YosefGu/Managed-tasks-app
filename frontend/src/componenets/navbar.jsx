@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useAuthContext'
-import { AppBar, Toolbar, Typography, Button, Container, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Container, Box, CssBaseline} from '@mui/material';
 
 const NavBar = () => {
     const { logout } = useLogout();
@@ -13,6 +13,7 @@ const NavBar = () => {
       }
   return (
     <AppBar position="static">
+      <CssBaseline />
     <Container>
       <Toolbar>
           {user ? (
@@ -23,6 +24,15 @@ const NavBar = () => {
               <Typography variant="body1" color="inherit" sx={{ marginLeft: 2 }}>
                 {user.email}
               </Typography>
+              <Button color="inherit" component={Link} to="/create">
+                Create
+              </Button>
+              <Button color="inherit" component={Link} to="/">
+                Home
+              </Button>
+              <Button color="inherit" component={Link} to="/projects">
+                Projects
+              </Button>
             </Box>
           ) : (
             <Box>
