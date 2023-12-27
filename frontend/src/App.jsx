@@ -8,6 +8,7 @@ import Signup from "./pages/Signup"
 import NavBar from "./componenets/navbar"
 import ProjectForm from "./componenets/projectForm"
 import Projects from "./componenets/project"
+import Board from "./pages/board"
 
 function App() {
   const { user } = useAuthContext();
@@ -27,6 +28,10 @@ function App() {
          <Route
           path='/projects'
           element= { user ? <Projects /> : <Navigate to='/login' />}
+        />
+         <Route
+          path='/board'
+          element= { user ? <Board /> : <Navigate to='/login' />}
         />
         <Route
           path='/signup'

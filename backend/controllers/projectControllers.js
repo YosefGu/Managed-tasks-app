@@ -6,7 +6,7 @@ const getAllProjects = async (req, res) => {
     const user_id = req.user._id;
 
     try {
-        const projects = await Project.find().sort({ createdAt: -1 });
+        const projects = await Project.find({users: user_id}).sort({ createdAt: -1 });
         res.status(200).json(projects);
 
     } catch (error) {
@@ -74,7 +74,8 @@ const updateProject = async (req, res) => {
     if (!project) {
         res.status(400).json({error: 'No such project in DB'})
     };
-    res.status(200).json(project)
+    const updateProject = await Project.find({_id: id})
+    res.status(200).json(updateProject)
 };
 
 module.exports = {

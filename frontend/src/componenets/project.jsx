@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useProjectsContext } from "../hooks/useProjectsContext";
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useUsersContext } from '../hooks/useUsersContext';
@@ -19,19 +20,37 @@ import {
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import EditForm from "./editForm";
 
 const api = 'http://localhost:3000';
 
 const Projects = () => {
-  const { projects, dispatch } = useProjectsContext();
+  const { projects, dispatchProjects } = useProjectsContext();
+
   const { user } = useAuthContext();
   const { users } = useUsersContext();
 
   const [expandedProjectId, setExpandedProjectId] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [able, setAble] = useState(false);
 
-  useEffect(() => {
+  const handleCardClick = (projectId) => {
+    setExpandedProjectId((prevId) => (prevId === projectId ? null : projectId));
+  };
+
+  const handleEditClick = (projectId) => {
+    setEditDialogOpen(true);
+    setSelectedProjectId(projectId);
+  };
+
+  const handleEditCancel = () => {
+    setEditDialogOpen(false);
+  }
+  const handleEditSubmit = () => {
+
     const fetchProjects = async () => {
       const response = await fetch(`${api}/api/project/projects`, {
         headers: {
@@ -40,16 +59,11 @@ const Projects = () => {
       });
       const json = await response.json();
       if (response.ok) {
-        dispatch({ type: 'SET_PROJECTS', payload: json })
+        dispatchProjects({ type: 'SET_PROJECTS', payload: json })
       }
     }
-    if (user) {
-      fetchProjects()
-    }
-  }, [dispatch, user])
-
-  const handleCardClick = (projectId) => {
-    setExpandedProjectId((prevId) => (prevId === projectId ? null : projectId));
+    fetchProjects();
+    setEditDialogOpen(false);
   };
 
   const handleDeleteClick = async (projectId) => {
@@ -58,6 +72,7 @@ const Projects = () => {
   };
 
   const handleDeleteConfirm = async () => {
+    setAble(true);
     const response = await fetch(`${api}/api/project/` + selectedProjectId, {
       method: 'DELETE',
       headers: {
@@ -67,10 +82,9 @@ const Projects = () => {
 
     const json = await response.json();
     if (response.ok) {
-      dispatch({type: 'DELETE_PROJECT', payload: json})
+      dispatchProjects({type: 'DELETE_PROJECT', payload: json})
+      setAble(false);
     }
-
-    // Close the dialog
     setDeleteDialogOpen(false);
   };
 
@@ -89,6 +103,8 @@ const Projects = () => {
     >
       <Box width="75%" height="75%" bgcolor="#7383" overflow="auto" p={2} position='relative'>
         <Typography variant='h4'sx={{ textAlign: 'center', position: 'sticky', top: 0, background: 'white', padding: '10px', zIndex: 1 }}>Projects</Typography>
+        <Button color="inherit" component={Link} to="/create">Create</Button>
+
         {projects && projects.map((project) => (
           <Paper key={project._id} style={{ margin: '10px', padding: '10px', cursor: 'pointer', transition: 'transform 0.3s ease', }}
             onClick={() => handleCardClick(project._id)}
@@ -101,8 +117,12 @@ const Projects = () => {
                 <IconButton onClick={() => handleDeleteClick(project._id)}>
                   <DeleteIcon />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={() => handleEditClick(project._id)}>
                   <EditIcon />
+                </IconButton>
+                <IconButton color="inherit" component={Link} to="/board">
+                  <ArrowForwardIcon />
+                  <Typography>Board</Typography>
                 </IconButton>
               </Box>
             </Box>
@@ -115,10 +135,8 @@ const Projects = () => {
               <ul>
                 {project.users.map((id) => {
                   const user = users && users.find((u) => u._id === id);
-                  return (
-                    <li key={id}>
-                      {user ? user.name : ''}
-                    </li>
+                  return ( 
+                    user ? (<li key={id}>{user.name}</li>) : null                                          
                   );
                 })}
               </ul>
@@ -126,7 +144,17 @@ const Projects = () => {
           </Paper>
         ))}
 
-        {/* Delete Confirmation Dialog */}
+        <Dialog open={editDialogOpen} onClose={handleEditCancel}>
+          <DialogTitle>Edit Project</DialogTitle>
+          <DialogContent>
+              <EditForm 
+              selectedProjectId={selectedProjectId}
+              onUpdate={handleEditSubmit}
+              onClose={handleEditCancel}
+              /> 
+          </DialogContent>
+        </Dialog>
+
         <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
           <DialogTitle>Delete Project</DialogTitle>
           <DialogContent>
@@ -138,7 +166,7 @@ const Projects = () => {
             <Button onClick={handleDeleteCancel} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleDeleteConfirm} color="primary">
+            <Button onClick={handleDeleteConfirm} color="primary" disabled={able}>
               Delete
             </Button>
           </DialogActions>

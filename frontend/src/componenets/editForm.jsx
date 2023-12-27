@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Button, Container, FormControl, InputLabel, Select, MenuItem, Box, Typography } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
 
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useUsersContext } from '../hooks/useUsersContext';
@@ -8,19 +7,30 @@ import { useProjectsContext } from '../hooks/useProjectsContext';
 
 const api = 'http://localhost:3000'
 
-const ProjectForm = () => {
+const EditForm = (props) => {
+
+  const {selectedProjectId} = props;
   const { users } = useUsersContext();
   const { user } = useAuthContext();
-  const { dispatchProjects } = useProjectsContext();
-  
-  const navigate = useNavigate();
+  const { projects } = useProjectsContext();
 
+  const [able, setAble] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [error, setError] = useState(null);
   const [selectUsers, setSelectedUsers] = useState([]);
   const [selectAuthor, setSelectAuthor] = useState([]);
+  const [error, setError] = useState(null);
   
+    useEffect(() => {
+        projects.map((p) => p._id === selectedProjectId ? (
+            setTitle(p.title),
+            setDescription(p.description),
+            setSelectedUsers(p.users),
+            setSelectAuthor(p.author),
+            setAble(false)
+        )
+        : null)
+    },[])
 
   const renderSelectedAuthor = (selected, users) => {
     return selected.map((selectedUserId) => {
@@ -28,6 +38,7 @@ const ProjectForm = () => {
       return selectAuthor ? selectAuthor.name : '';
     }).join(', ');
   };
+
   const renderSelectedUsers = (selected, users) => {
     return selected.map((selectedUserId) => {
       const selectedUser = users.find((user) => user._id === selectedUserId);
@@ -44,10 +55,10 @@ const ProjectForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setAble(true)
     const project = {title, description, users: selectUsers, author: selectAuthor}
-    const response = await fetch(`${api}/api/project/create`, {
-      method: 'POST',
+    const response = await fetch(`${api}/api/project/` + selectedProjectId, {
+      method: 'PATCH',
       body: JSON.stringify(project),
       headers: {
           'Content-Type': 'application/json',
@@ -64,10 +75,11 @@ const ProjectForm = () => {
     setDescription('');
     setSelectedUsers([]);
     setSelectAuthor([]);
+    // dispatchProjects({ type: 'UPDATE_PROJECT', payload: json });
+    // const newState = projects.map((p) => p._id === json._id ? json : p)
+    // dispatchProjects({ type: 'SET_PROJECTS', payload: newState });
+    props.onUpdate(json);
     setError(null);
-    dispatchProjects({type: 'CREATE_PROJECT', payload: json});
-    navigate('/projects');
-    
   }
   };
 
@@ -135,10 +147,10 @@ const ProjectForm = () => {
           </FormControl>
         </Box>
         <Box mt={3}>
-          <Button type="submit" variant="contained" color="primary">
-            Add Project
+          <Button type="submit" variant="contained" color="primary" disabled={able}>
+            Submit
           </Button>
-          <Button component={Link} to="/projects" color="primary">
+          <Button onClick={props.onClose} color="primary">
             Back 
           </Button>         
         </Box>
@@ -148,4 +160,4 @@ const ProjectForm = () => {
   );
 };
 
-export default ProjectForm;
+export default EditForm;

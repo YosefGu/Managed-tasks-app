@@ -24,9 +24,6 @@ const NavBar = () => {
               <Typography variant="body1" color="inherit" sx={{ marginLeft: 2 }}>
                 {user.email}
               </Typography>
-              <Button color="inherit" component={Link} to="/create">
-                Create
-              </Button>
               <Button color="inherit" component={Link} to="/">
                 Home
               </Button>
