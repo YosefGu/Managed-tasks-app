@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { Container, Paper, Typography, TextField, Button } from '@mui/material'
 import { useLogin } from '../hooks/useLogin';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -13,6 +14,11 @@ const Login = () => {
     
         await login(email, password)
     };
+
+    const googleLogin = async (data) => {
+      console.log(data)
+
+    }
   
     return (
       <Container
@@ -60,7 +66,21 @@ const Login = () => {
             </Button>
             {error && <Typography>{error}</Typography>}
           </form>
+          <h3>
+            <span>or</span>
+          </h3>
+          <GoogleLogin 
+          onSuccess={ credentialResponse => {
+            googleLogin(credentialResponse)
+            // console.log(credentialResponse);
+          }}
+          onError={() => {
+            console.log('Login Failed');
+          }}
+        />
         </Paper>
+
+        
       </Container>
     );
   };

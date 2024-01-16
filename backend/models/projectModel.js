@@ -16,10 +16,10 @@ const projectSchema = new Schema({
     },
     tasks: {
         type: {
-            open: Array,
-            progress: Array,
-            resolved: Array,
-            closed: Array
+            open: {},
+            progress: {},
+            resolved: {},
+            closed: {}
         }
     },
     author: {

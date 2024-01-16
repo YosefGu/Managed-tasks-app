@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const { OAuth2Client } = require('google-auth-library');
 
 const Schema = mongoose.Schema;
 
@@ -82,4 +83,35 @@ userSchema.statics.login = async function( email, password ) {
     return user
 }
 
+// static verifyGoogleLogin
+userSchema.statics.verifyGoogleLogin = async function(client_id, jwtToken) {
+    const client = new OAuth2Client(client_id);
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: jwtToken,
+            audience: client_id,
+        });
+        const payload = ticket.getPayload();
+        const exists = await this.findOne({ email: payload.email })
+        if (exists) {
+            // console.log(exists, 1)
+            return exists
+        } else {
+
+            const user = await this.create({ 
+                name: payload.name, 
+                lName: payload.family_name, 
+                title: null, 
+                email: payload.email , 
+                password: 'google', 
+                manager: null });
+                // console.log(user, 2)
+            return user
+        }
+
+    } catch (error) {
+        throw Error({1: 'Token verification error', error: error.message})
+    }
+}
 module.exports = mongoose.model('User', userSchema);

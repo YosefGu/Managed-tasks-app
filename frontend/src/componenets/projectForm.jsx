@@ -19,6 +19,7 @@ const ProjectForm = () => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState(null);
   const [selectUsers, setSelectedUsers] = useState([]);
+  const [tasks, setTasks] = useState({});
   const [selectAuthor, setSelectAuthor] = useState([]);
   
 
@@ -45,7 +46,7 @@ const ProjectForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const project = {title, description, users: selectUsers, author: selectAuthor}
+    const project = {title, description, users: selectUsers, tasks, author: selectAuthor}
     const response = await fetch(`${api}/api/project/create`, {
       method: 'POST',
       body: JSON.stringify(project),
