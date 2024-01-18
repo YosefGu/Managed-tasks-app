@@ -94,8 +94,8 @@ userSchema.statics.verifyGoogleLogin = async function(client_id, jwtToken) {
         });
         const payload = ticket.getPayload();
         const exists = await this.findOne({ email: payload.email })
+        
         if (exists) {
-            // console.log(exists, 1)
             return exists
         } else {
 
@@ -106,12 +106,11 @@ userSchema.statics.verifyGoogleLogin = async function(client_id, jwtToken) {
                 email: payload.email , 
                 password: 'google', 
                 manager: null });
-                // console.log(user, 2)
             return user
         }
 
     } catch (error) {
-        throw Error({1: 'Token verification error', error: error.message})
+        throw Error(`Token verification error, ${error.message}`)
     }
 }
 module.exports = mongoose.model('User', userSchema);

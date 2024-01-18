@@ -12,3 +12,39 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 } */
+
+.or {
+  position: relative;
+}
+
+.or::before {
+  right: 100%;
+  margin-right: 10px;
+}
+
+.or::after {
+  left: 100%;
+  margin-left: 10px;
+}
+
+.or::after,
+.or::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 600%;
+  height: 1px;
+  background-color: #4b4b4b
+}
+
+/* .or {
+  display: flex;
+  align-items: center;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background-color: #4b4b4b;
+  margin: 0 10px;
+} */

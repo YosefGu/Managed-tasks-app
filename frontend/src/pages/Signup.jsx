@@ -1,7 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
-import { Container, Paper, Typography, TextField, Button } from '@mui/material'
+import { Container, Paper, Typography, TextField, Button, Box } from '@mui/material'
 import { useSignup } from '../hooks/useSignup';
+import GoogleLoginButton from '../componenets/googleLogin'
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -33,14 +35,18 @@ const Signup = () => {
       >
         <Paper elevation={3} sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography component="h1" variant="h5" mb={2}>
-            Sign up
+            Create an account
           </Typography>
+          
+          <GoogleLoginButton />
+          <h3 className='or'>or</h3>
+
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
           <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="name"
               label="Name"
               name="name"
               autoComplete="name"
@@ -101,6 +107,18 @@ const Signup = () => {
             </Button>
             {error && <Typography>{error}</Typography>}
           </form>
+          <Box display='flex' style={{m:'10px'}}>
+            <Typography>Already have an account?</Typography>
+            <Typography 
+              variant="body1" 
+              color="primary" 
+              component={Link} 
+              to='/login'
+              style={{textDecoration:'none', marginLeft:5}}
+              > 
+              Sign in
+              </Typography>
+          </Box>
         </Paper>
       </Container>
     );

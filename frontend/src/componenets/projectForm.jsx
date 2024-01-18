@@ -74,7 +74,7 @@ const ProjectForm = () => {
 
   return (
     <Container maxWidth="sm">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete='off'>
         <Box mt={3}>
           <TextField
             label="Title"

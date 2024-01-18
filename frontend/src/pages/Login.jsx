@@ -1,24 +1,26 @@
 import React from 'react'
 import { useState } from 'react';
-import { Container, Paper, Typography, TextField, Button } from '@mui/material'
+import { Container, Paper, Typography, TextField, Button, Box } from '@mui/material'
 import { useLogin } from '../hooks/useLogin';
-import { GoogleLogin } from '@react-oauth/google';
+import GoogleLoginButton from '../componenets/googleLogin'
+import { Link } from 'react-router-dom';
+// import { useGoogleLogin } from '../hooks/useGoogleLogin';
+// import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const {login, isLoading, error } = useLogin();
+    // const {googleLogin, gError } = useGoogleLogin();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-    
         await login(email, password)
     };
 
-    const googleLogin = async (data) => {
-      console.log(data)
-
-    }
+    // const handleGoogleLogin = async (data) => {
+    //   await googleLogin(data)
+    // }
   
     return (
       <Container
@@ -34,8 +36,20 @@ const Login = () => {
       >
         <Paper elevation={3} sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography component="h1" variant="h5" mb={2}>
-            Login
+            Sign in
           </Typography>
+          <Box display='flex' style={{m:'10px'}}>
+            <Typography>New user?</Typography>
+            <Typography 
+              variant="body1" 
+              color="primary" 
+              component={Link} 
+              to='/signup'
+              style={{textDecoration:'none', marginLeft:5}}
+              > 
+              Create an account
+              </Typography>
+          </Box>
           <form onSubmit={handleSubmit} style={{ width: '100%' }}>
             <TextField
               margin="normal"
@@ -63,24 +77,21 @@ const Login = () => {
             />
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2, display:{isLoading}}}>
               Login
-            </Button>
+            </Button>         
             {error && <Typography>{error}</Typography>}
+            <Typography
+              variant="body1" 
+              color="primary" 
+              component={Link} 
+              to='/identify'
+              style={{textDecoration:'none', marginLeft:5}}
+            >
+            Forget password?
+            </Typography>
           </form>
-          <h3>
-            <span>or</span>
-          </h3>
-          <GoogleLogin 
-          onSuccess={ credentialResponse => {
-            googleLogin(credentialResponse)
-            // console.log(credentialResponse);
-          }}
-          onError={() => {
-            console.log('Login Failed');
-          }}
-        />
-        </Paper>
-
-        
+          <h3 className='or'>or</h3>
+          <GoogleLoginButton />
+        </Paper>      
       </Container>
     );
   };
