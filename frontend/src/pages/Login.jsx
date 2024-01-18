@@ -50,7 +50,7 @@ const Login = () => {
               Create an account
               </Typography>
           </Box>
-          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <form onSubmit={handleSubmit} style={{ width: '100%' }}  autoComplete='off'>
             <TextField
               margin="normal"
               required
@@ -58,7 +58,6 @@ const Login = () => {
               id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
               autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -71,7 +70,6 @@ const Login = () => {
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />

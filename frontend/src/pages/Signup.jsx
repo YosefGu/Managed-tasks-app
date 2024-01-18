@@ -33,7 +33,7 @@ const Signup = () => {
           height: '100vh',
         }}
       >
-        <Paper elevation={3} sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Paper elevation={3} sx={{ padding: 4, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <Typography component="h1" variant="h5" mb={2}>
             Create an account
           </Typography>
@@ -41,7 +41,7 @@ const Signup = () => {
           <GoogleLoginButton />
           <h3 className='or'>or</h3>
 
-          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <form onSubmit={handleSubmit} style={{ width: '100%' }}  autoComplete='off'>
           <TextField
               margin="normal"
               required
@@ -49,7 +49,6 @@ const Signup = () => {
               id="name"
               label="Name"
               name="name"
-              autoComplete="name"
               autoFocus
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -61,7 +60,6 @@ const Signup = () => {
               id="lName"
               label="Last name"
               name="lName"
-              autoComplete="lName"
               autoFocus
               value={lName}
               onChange={(e) => setLname(e.target.value)}
@@ -73,7 +71,6 @@ const Signup = () => {
               id="title"
               label="Title"
               name="title"
-              autoComplete="title"
               autoFocus
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -85,7 +82,6 @@ const Signup = () => {
               id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
               autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -98,7 +94,6 @@ const Signup = () => {
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
