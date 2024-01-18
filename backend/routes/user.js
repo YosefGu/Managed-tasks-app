@@ -1,6 +1,6 @@
 const express = require('express');
 const requireAuth = require('../middleware/requireAuth');
-const { signupUser, loginUser, googleLogin, getAllUsers, getUser, deleteUser, updateUser } = 
+const { signupUser, loginUser, googleLogin, recover, getAllUsers, getUser, deleteUser, updateUser } = 
 require('../controllers/userControllers');
 
 const router = express.Router();
@@ -14,6 +14,9 @@ router.post('/login', loginUser);
 
 // google login
 router.post('/google/login', googleLogin);
+
+// recover account
+router.post('/recover', recover);
 
 // authorization
 router.use(requireAuth);

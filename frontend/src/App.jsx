@@ -10,6 +10,8 @@ import ProjectForm from "./componenets/projectForm"
 import Projects from "./componenets/project"
 import Board from "./pages/board"
 import Identify from "./pages/identify"
+import Recovery from "./pages/recovery"
+
 
 function App() {
   const { user } = useAuthContext();
@@ -45,6 +47,10 @@ function App() {
         <Route
           path='/identify'
           element= { !user ? <Identify /> : <Navigate to='/' />}
+        />
+        <Route
+          path='/recovery'
+          element= { !user ? <Recovery /> : <Navigate to='/' />}
         />
       </Routes>
     </BrowserRouter>

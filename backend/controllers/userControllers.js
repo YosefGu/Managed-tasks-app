@@ -2,6 +2,10 @@ const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
+const fs = require('fs');
+const path = require('path');
+
+const Support = require('../support');
 
 
 const createToken = (_id) => {
@@ -53,6 +57,24 @@ const loginUser = async (req, res) => {
    };
 };
 
+// recover account
+const recover = async (req, res) => {
+    const {email} = req.body;
+    const user = await User.findOne({email: email})
+
+    const title = 'Support - recover your password'
+    
+    const filePath = path.resolve(__dirname, '../mails/recover.html')
+    const page = fs.readFileSync(filePath, 'utf8')
+
+    if (user) {
+        Support(email, title, page)
+        res.status(200).json(user)
+    } else {
+        res.status(400).json('User not found.')
+    }
+}
+
 // get all users
 const getAllUsers = async (req, res) => {
     const users = await User.find().sort({createdAt: -1});
@@ -102,6 +124,7 @@ module.exports = {
     signupUser,
     loginUser, 
     googleLogin,
+    recover,
     getAllUsers, 
     getUser, 
     deleteUser, 
